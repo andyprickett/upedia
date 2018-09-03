@@ -1,0 +1,19 @@
+{
+  "name": "bloccipedia-node",
+  "version": "1.0.0",
+  "description": "An application that allows users to create, collaborate on, and share wikis.",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "export NODE_ENV=test && jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andyprickett/blocipedia-node.git"
+  },
+  "author": "Andy Prickett",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andyprickett/blocipedia-node/issues"
+  },
+  "homepage": "https://github.com/andyprickett/blocipedia-node#readme"
+}
