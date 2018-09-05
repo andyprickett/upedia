@@ -1,10 +1,11 @@
 {
-  "name": "bloccipedia-node",
+  "name": "blocipedia-node",
   "version": "1.0.0",
   "description": "An application that allows users to create, collaborate on, and share wikis.",
   "main": "src/server.js",
   "scripts": {
-    "test": "export NODE_ENV=test && jasmine"
+    "test": "export NODE_ENV=test && jasmine",
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,26 @@
   "bugs": {
     "url": "https://github.com/andyprickett/blocipedia-node/issues"
   },
-  "homepage": "https://github.com/andyprickett/blocipedia-node#readme"
+  "homepage": "https://github.com/andyprickett/blocipedia-node#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "dotenv": "^5.0.0",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-flash": "0.0.2",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.0.2",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg": "^7.4.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.32.6",
+    "sequelize-cli": "^4.0.0"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "jasmine": "^3.1.0",
+    "request": "^2.83.0"
+  }
 }
