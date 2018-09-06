@@ -1,90 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<!-- #1 -->
-    <title><%= title %></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-
-<!-- #2 -->
-    <link rel="stylesheet" href="/css/application.css">
+    <% include ./partials/head.ejs %>
   </head>
   <body>
+    <!-- Navigation -->
+    <% include ./partials/navbar.ejs %>
 
-      <!-- Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-          <a class="navbar-brand" href="#">Blocipedia</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="#">Home
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+    <!-- Page Content -->
+    <main class="container">
 
-      <!-- Page Content -->
-      <main class="container">
+      <% include ../static/partials/messages.ejs %>
 
-        <!-- Jumbotron Header -->
-        <header class="jumbotron my-4">
-          <h1 class="display-3">Welcome to Blocipedia</h1>
-          <p class="lead">An application for users to create, collaborate on, and share wikis.</p>
-          <a href="#" class="btn btn-primary btn-lg">Sign up</a>
-        </header>
+      <!-- Jumbotron Header -->
+      <header class="jumbotron my-4">
+        <h1 class="display-3">Welcome to Blocipedia</h1>
+        <p class="lead">An application for users to create, collaborate on, and share wikis.</p>
+        <a href="/users/sign_up" class="btn btn-primary btn-lg">Sign up</a>
+      </header>
 
-        <!-- Page Features -->
-        <section class="row text-center">
+      <!-- Page Features -->
+      <section class="row text-center">
 
-          <section class="col-lg-4">
-            <h4 class="card-title">Create</h4>
-            <p class="card-text">Make as many public wikis as you want about subjects that are important to you!</p>
-          </section>
-
-          <section class="col-lg-4">
-            <h4 class="card-title">Collaborate</h4>
-            <p class="card-text">Work with and share in the knowledge of multiple users!</p>
-          </section>
-
-          <section class="col-lg-4">
-            <h4 class="card-title">Privatize</h4>
-            <p class="card-text">Go Premium and share your private wikis with selected users!</p>
-          </section>
-
+        <section class="col-lg-4">
+          <h4 class="card-title">Create</h4>
+          <p class="card-text">Make as many public wikis as you want about subjects that are important to you!</p>
         </section>
-        <!-- /.row -->
 
-        <!-- Account Options -->
-        <section class="row justify-content-around text-center">
-
-          <section class="col-lg-3 mt-5">
-            <a href="#" class="btn btn-primary btn-lg btn-block pt-4 pb-4">Free Plan</a>
-          </section>
-
-          <section class="col-lg-3 mt-5">
-            <a href="#" class="btn btn-primary btn-lg btn-block pt-4 pb-4">Premium Plan</a>
-          </section>
-
+        <section class="col-lg-4">
+          <h4 class="card-title">Collaborate</h4>
+          <p class="card-text">Work with and share in the knowledge of multiple users!</p>
         </section>
-        <!-- /.row -->
 
-      </main>
-      <!-- /.container -->
+        <section class="col-lg-4">
+          <h4 class="card-title">Privatize</h4>
+          <p class="card-text">Go Premium and share your private wikis with selected users!</p>
+        </section>
 
-      <script
-        src="http://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous">
-      </script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    </body>
+      </section>
+      <!-- /.row -->
+
+      <!-- Account Options -->
+      <section class="row justify-content-around text-center">
+
+        <section class="col-lg-3 mt-5">
+          <a href="#" class="btn btn-primary btn-lg btn-block pt-4 pb-4">Free Plan</a>
+        </section>
+
+        <section class="col-lg-3 mt-5">
+          <a href="#" class="btn btn-primary btn-lg btn-block pt-4 pb-4">Premium Plan</a>
+        </section>
+
+      </section>
+      <!-- /.row -->
+
+    </main>
+    <!-- /.container -->
+
+    <% include ./partials/baseScripts.ejs %>
+  </body>
 </html>
