@@ -1,5 +1,5 @@
 const userQueries = require("../db/queries.users.js");
-// const passport = require("passport");
+const passport = require("passport");
 
 module.exports = {
   signUpForm(req, res, next) {
@@ -36,25 +36,35 @@ module.exports = {
       }
     });
   },
-  // signInForm(req, res, next) {
-  //   res.render("users/sign_in");
-  // },
-  // signIn(req, res, next) {
-  //   passport.authenticate("local")(req, res, () => {
-  //     if(!req.user) {
-  //       req.flash("notice", "Sign in failed. Please try again.");
-  //       res.redirect("/users/sign_in");
-  //     } else {
-  //       req.flash("notice", "You've successfully signed in!");
-  //       res.redirect("/");
-  //     }
-  //   });
-  // },
-  // signOut(req, res, next) {
-  //   req.logout();
-  //   req.flash("notice", "You've successfully signed out!");
-  //   res.redirect("/");
-  // },
+  signInForm(req, res, next) {
+    res.render("users/sign_in");
+  },
+  signIn(req, res, next) {
+    passport.authenticate("local", {failureRedirect: "/users/sign_in_failed"})(req, res, () => {
+      if(!req.user) {
+        /* Never gets here because of "failureRedirect" above, which is a substitute
+           for the default Passport 401 error page. This stuff didn't work anyways!!
+           Frustrating!!!! Had to come up with something else.
+        */
+        req.flash("notice", "Sign in failed. Please try again.");
+        res.redirect("/users/sign_in");
+      } else {
+        // This will happen if authentication works.
+        req.flash("notice", "You've successfully signed in!");
+        res.redirect("/");
+      }
+    });
+  },
+  signInFailed(req, res, next) {
+    // Substitute for Passport error handling, which I couldn't get to work :(
+    req.flash("notice", "Signin credentials didn't work. Please try again.");
+    res.redirect("/users/sign_in");
+  },
+  signOut(req, res, next) {
+    req.logout();
+    req.flash("notice", "You've successfully signed out!");
+    res.redirect("/");
+  },
   // show(req, res, next) {
   //   userQueries.getUser(req.params.id, (err, result) => {
   //     if(err || result.user === undefined) {

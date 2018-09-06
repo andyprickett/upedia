@@ -34,7 +34,8 @@ describe("routes : users", () => {
         form: {
           name: "Number One",
           email: "user@example.com",
-          password: "123456789"
+          password: "123456789",
+          passwordConfirmation: "123456789"
         }
       }
       request.post(options, (err, res, body) => {
@@ -55,8 +56,10 @@ describe("routes : users", () => {
       const options = {
         url: `${base}sign_up`,
         form: {
+          name: "No",
           email: "no",
-          password: "123456789"
+          password: "123456789",
+          passwordConfirmation: "123456789"
         }
       };
       request.post(options, (err, res, body) => {
@@ -72,7 +75,6 @@ describe("routes : users", () => {
       });
     });
   });
-  /*
   describe("GET /users/sign_in", () => {
     it("should render a view with a sign in form", (done) => {
       request.get(`${base}sign_in`, (err, res, body) => {
@@ -82,7 +84,7 @@ describe("routes : users", () => {
       });
     });
   });
-
+  /*
   describe("GET /users/:id", () => {
 
     beforeEach((done) => {

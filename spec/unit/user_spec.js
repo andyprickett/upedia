@@ -22,7 +22,8 @@ describe("User", () => {
       User.create({
         name: "Number One",
         email: "user1@example.com",
-        password: "1234567890"
+        password: "1234567890",
+        passwordConfirmation: "1234567890"
       })
       .then((user) => {
         expect(user.name).toBe("Number One");
@@ -39,7 +40,8 @@ describe("User", () => {
       User.create({
         name: "Number Two",
         email: "It's-a me, Mario!",
-        password: "1234567890"
+        password: "1234567890",
+        passwordConfirmation: "1234567890"
       })
       .then((user) => {
         // code in this block won't be evaluated
@@ -54,7 +56,8 @@ describe("User", () => {
       User.create({
         name: "Number Three",
         email: "user3@example.com",
-        password: "1234567890"
+        password: "1234567890",
+        passwordConfirmation: "1234567890"
       })
       .then((user) => {
         this.user3 = user;
@@ -62,7 +65,9 @@ describe("User", () => {
         User.create({
           name: "Number Four",
           email: "user3@example.com",
-          password: "nana BATMAN!"
+          password: "nana BATMAN!",
+          passwordConfirmation: "nana BATMAN!"
+
         })
         .then((user) => {
           // code in this block will not be evaluated
