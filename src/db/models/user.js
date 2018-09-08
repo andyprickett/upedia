@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   User.associate = function(models) {
     // associations can be defined here
+    User.hasMany(models.Wiki, {
+      foreignKey: "userId",
+      as: "wikis"
+    });
   };
   return User;
 };

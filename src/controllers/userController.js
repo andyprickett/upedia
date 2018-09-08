@@ -31,6 +31,7 @@ module.exports = {
         // passport.authenticate("local")(req, res, () => {
           // req.flash("notice", "You've successfully signed in!");
           req.flash("notice", "You've successfully signed up!");
+          // Good for you, now go sign in
           res.redirect("/");
         // })
       }
@@ -43,7 +44,7 @@ module.exports = {
     passport.authenticate("local", {failureRedirect: "/users/sign_in_failed"})(req, res, () => {
       if(!req.user) {
         /* Never gets here because of "failureRedirect" above, which is a substitute
-           for the default Passport 401 error page. This stuff didn't work anyways!!
+           for the default Passport 401 error page. This stuff below didn't work anyways!!
            Frustrating!!!! Had to come up with something else.
         */
         req.flash("notice", "Sign in failed. Please try again.");
@@ -51,6 +52,7 @@ module.exports = {
       } else {
         // This will happen if authentication works.
         req.flash("notice", "You've successfully signed in!");
+        // Hate this redirect to Home, but solution is too complicated for me :(
         res.redirect("/");
       }
     });
