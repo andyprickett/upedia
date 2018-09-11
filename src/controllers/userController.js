@@ -76,5 +76,14 @@ module.exports = {
         res.render("users/show", {...result});
       }
     });
+  },
+  index(req, res, next) {
+    userQueries.getAllUsers((err, users) => {
+      if(err) {
+        res.redirect(500, "static/index");
+      } else {
+        res.render("users/index", { users });
+      }
+    });
   }
 }

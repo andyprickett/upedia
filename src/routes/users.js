@@ -12,5 +12,7 @@ router.get("/users/sign_in_failed", userController.signInFailed);
 router.post("/users/sign_in", validation.validateUserSignIn, userController.signIn);
 router.get("/users/sign_out", userController.signOut);
 router.get("/users/:id", userController.show);
+router.get("/users", userController.index);
+
 
 module.exports = router;

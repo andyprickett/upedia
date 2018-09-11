@@ -11,8 +11,10 @@
 
       <% include ../static/partials/messages.ejs %>
 
-      <h1><%= `${user.email}'s profile` %></h1>
-      <h3>User Role: <span><% if(user.role === 0) { %>
+      <h1><%= `${user.name}'s profile` %></h1>
+      <h5><%= `Email: ${user.email}` %></h1>
+
+      <h6>User Role: <span><% if(user.role === 0) { %>
                              <%= "Standard (Free)" %>
                            <% } else if(user.role === 1) { %>
                              <%= "Premium" %>

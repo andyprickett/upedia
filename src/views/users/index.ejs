@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../static/partials/head.ejs %>
+  </head>
+  <body>
+    <% include ../static/partials/navbar.ejs %>
+
+    <main class="container">
+
+      <% include ../static/partials/messages.ejs %>
+
+      <h1>Users</h1>
+      
+      <ul class="list-unstyled">
+
+        <% users.forEach((user) => { %>
+        
+          <li class="media mt-1 mb-1 border border-dark">
+            <img class="mr-3" src="https://loremflickr.com/64/64" alt="Generic placeholder image">
+            <div class="media-body">
+              <h5 class="mt-0"><a href="/users/<%= user.id %>"><%= user.name %></a></h5>
+              <h6>User Role: <span><% if(user.role === 0) { %>
+                                     <%= "Standard (Free)" %>
+                                   <% } else if(user.role === 1) { %>
+                                     <%= "Premium" %>
+                                   <% } else if(user.role === 2) { %>
+                                     <%= "Admin" %>
+                                   <% } else { %>
+                                     <%= "huh?" %>
+                                   <% } %>
+                             </span>
+              </h6>
+            </div>
+          </li>
+
+        <% }) %>
+
+      </ul>
+
+    </main>
+
+    <% include ../static/partials/baseScripts.ejs %>
+
+  </body>
+</html>
