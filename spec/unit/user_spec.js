@@ -26,7 +26,7 @@ describe("User", () => {
         name: "Number One",
         email: "user1@example.com",
         password: "1234567890",
-        passwordConfirmation: "1234567890"
+        // passwordConfirmation: "1234567890"
       })
       .then((user) => {
         expect(user.name).toBe("Number One");
@@ -44,7 +44,7 @@ describe("User", () => {
         name: "Number Two",
         email: "It's-a me, Mario!",
         password: "1234567890",
-        passwordConfirmation: "1234567890"
+        // passwordConfirmation: "1234567890"
       })
       .then((user) => {
         // code in this block won't be evaluated
@@ -60,16 +60,16 @@ describe("User", () => {
         name: "Number Three",
         email: "user3@example.com",
         password: "1234567890",
-        passwordConfirmation: "1234567890"
+        // passwordConfirmation: "1234567890"
       })
       .then((user) => {
         this.user3 = user;
-        console.log('hello 3')
+        console.log('hello from 3')
         User.create({
           name: "Number Four",
           email: "user3@example.com",
           password: "nana BATMAN!",
-          passwordConfirmation: "nana BATMAN!"
+          // passwordConfirmation: "nana BATMAN!"
 
         })
         .then((user) => {
@@ -97,7 +97,7 @@ describe("User", () => {
         name: "Number One",
         email: "user1@example.com",
         password: "1234567890",
-        passwordConfirmation: "1234567890"
+        // passwordConfirmation: "1234567890"
       })
       .then((user) => {
         this.user = user;
@@ -118,6 +118,24 @@ describe("User", () => {
             done();
           })
         })
+      });
+    });
+  });
+  describe("#getRole", () => {
+    it("should return a default role of 0", (done) => {
+      User.create({
+        name: "Test User",
+        email: "tester@example.com",
+        password: "123456"
+      })
+      .then((user) => {
+        this.user = user;
+        expect(user.role).toBe(0);
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+        done();
       });
     });
   });

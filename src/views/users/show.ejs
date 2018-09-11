@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../static/partials/head.ejs %>
+  </head>
+  <body>
+
+    <% include ../static/partials/navbar.ejs %>
+
+    <main class="container">
+
+      <% include ../static/partials/messages.ejs %>
+
+      <h1><%= `${user.email}'s profile` %></h1>
+      <h3>User Role: <span><% if(user.role === 0) { %>
+                             <%= "Standard (Free)" %>
+                           <% } else if(user.role === 1) { %>
+                             <%= "Premium" %>
+                           <% } else if(user.role === 2) { %>
+                             <%= "Admin" %>
+                           <% } else { %>
+                             <%= "huh?" %>
+                           <% } %>
+                     </span>
+      </h3>
+
+      <hr>
+
+      <h2>User Wikis</h2>
+
+      <ul class="list-unstyled">
+        <% if(wikis) { %>
+          <% wikis.forEach((wiki) => { %>
+            <li>
+              <a href="/wikis/<%= wiki.id %>">
+                <%= wiki.title %>
+              </a>
+            </li>
+          <% }) %>
+        <% } %>
+      </ul>
+
+    </main>
+
+    <% include ../static/partials/baseScripts.ejs %>
+
+  </body>
+</html>

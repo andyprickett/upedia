@@ -28,10 +28,10 @@ module.exports = {
           html: '<strong>Log in and start collaborating on wikis!</strong>',
         };
         sgMail.send(msg);
-        // passport.authenticate("local")(req, res, () => {
-          // req.flash("notice", "You've successfully signed in!");
+        // passport.authenticate("local")(req, res, () => {   // nope, not yet
+          // req.flash("notice", "You've successfully signed in!"); // nope
           req.flash("notice", "You've successfully signed up!");
-          // Good for you, now go sign in
+          // Good for you, now go sign in:
           res.redirect("/");
         // })
       }
@@ -52,7 +52,7 @@ module.exports = {
       } else {
         // This will happen if authentication works.
         req.flash("notice", "You've successfully signed in!");
-        // Hate this redirect to Home, but solution is too complicated for me :(
+        // Hate this redirect to Home, but "redirect to same page" solution is too complicated for me :(
         res.redirect("/");
       }
     });
@@ -67,14 +67,14 @@ module.exports = {
     req.flash("notice", "You've successfully signed out!");
     res.redirect("/");
   },
-  // show(req, res, next) {
-  //   userQueries.getUser(req.params.id, (err, result) => {
-  //     if(err || result.user === undefined) {
-  //       req.flash("notice", "No user found with that ID.");
-  //       res.redirect("/");
-  //     } else {
-  //       res.render("users/show", {...result});
-  //     }
-  //   });
-  // }
+  show(req, res, next) {
+    userQueries.getUser(req.params.id, (err, result) => {
+      if(err || result.user === undefined) {
+        req.flash("notice", "No user found with that ID.");
+        res.redirect("/");
+      } else {
+        res.render("users/show", {...result});
+      }
+    });
+  }
 }

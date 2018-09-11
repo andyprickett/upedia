@@ -1,4 +1,5 @@
 const User = require("./models").User;
+const Wiki = require("./models").Wiki;
 const bcrypt = require("bcryptjs");
 
 module.exports = {
@@ -16,38 +17,32 @@ module.exports = {
     })
     .catch((err) => {
       // console.log(err.errors)
-      errorReformatted = [{
+      errorReformatted = [{  // make this fit our view messaging
         param: err.errors[0].path,
         msg: err.errors[0].message
       }]
       callback(errorReformatted);
     });
-  }/*,
+  },
   getUser(id, callback) {
     let result = {};
     User.findById(id)
-    .then((user) => {\q
+    .then((user) => {
       if(!user) {
         callback(404);
       } else {
         result["user"] = user;
 
-        Post.scope({ method: ["lastFiveFor", id]}).all()
-        .then((posts) => {
-          result["posts"] = posts;
+        Wiki.scope({ method: ["userWikis", id]}).all()
+        .then((wikis) => {
+          result["wikis"] = wikis;
 
-          Comment.scope({method: ["lastFiveFor", id]}).all()
-          .then((comments) => {
-            result["comments"] = comments;
-            
-            callback(null, result);
-          })
-          .catch((err) => {
-            callback(err);
-          });
+          callback(null, result);
+        })
+        .catch((err) => {
+          callback(err);
         });
       }
     });
   }
-  */
 }

@@ -25,5 +25,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
     });
   };
+  Wiki.addScope("userWikis", (userId) => {
+    return {
+      where: { userId: userId },
+      order: [["createdAt", "DESC"]]
+    }
+  });
   return Wiki;
 };
