@@ -1,10 +1,10 @@
 const User = require("./models").User;
 const Wiki = require("./models").Wiki;
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs"); 
 
 module.exports = {
   createUser(newUser, callback) {
-    const salt =bcrypt.genSaltSync();
+    const salt = bcrypt.genSaltSync();  
     const hashedPassword = bcrypt.hashSync(newUser.password, salt);
 
     return User.create({
