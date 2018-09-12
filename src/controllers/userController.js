@@ -89,5 +89,29 @@ module.exports = {
         res.render("users/index", { users });
       }
     });
+  },
+  upgrade(req, res, next) {
+    userQueries.upgradeUser(req, (err, user) => {
+      if(err || user == null) {
+        req.flash("notice", "Something went wrong.");
+        res.redirect(err, "/users");
+      } else {
+        req.flash("notice", "Nice! You've been upgraded!");
+        // res.redirect(req.headers.referer);
+        res.redirect(`/users/${req.params.id}`);
+      }
+    });
+  },
+  downgrade(req, res, next) {
+    userQueries.downgradeUser(req, (err, user) => {
+      if(err || user == null) {
+        req.flash("notice", "Something went wrong.");
+        res.redirect(err, "/users");
+      } else {
+        req.flash("notice", "Bummer! You've downgraded!");
+        // res.redirect(req.headers.referer);
+        res.redirect(`/users/${req.params.id}`);
+      }
+    });
   }
 }

@@ -13,6 +13,9 @@ router.post("/users/sign_in", validation.validateUserSignIn, userController.sign
 router.get("/users/sign_out", userController.signOut);
 router.get("/users/:id", userController.show);
 router.get("/users", userController.index);
+router.post("/users/:id/upgrade", userController.upgrade);
+router.post("/users/:id/downgrade", userController.downgrade);
+
 
 
 module.exports = router;

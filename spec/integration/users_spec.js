@@ -18,6 +18,7 @@ describe("routes : users", () => {
       done();
     });
   });
+  /*
   describe("GET /users/sign_up", () => {
     it("should render a view with a sign up form", (done) => {
       request.get(`${base}sign_up`, (err, res, body) => {
@@ -92,7 +93,7 @@ describe("routes : users", () => {
       request.get({ // mock authentication
         url: "http://localhost:3000/auth/fake",
         form: {
-          userId: 0
+          userId: 0 // sign out, "clean the slate"
         }
       },
         (err, res, body) => {
@@ -133,7 +134,7 @@ describe("routes : users", () => {
         request.get({ // mock authentication
           url: "http://localhost:3000/auth/fake",
           form: {
-            userId: user.id,
+            userId: user.id, // sign back in
             role: user.role,
             email: user.email
           }
@@ -147,13 +148,178 @@ describe("routes : users", () => {
 
     it("should present a list of wikis a user has created", (done) => {
       request.get(`${base}${this.user.id}`, (err, res, body) => {
-        console.log
         // expect(body).toContain("Standard");    // role: 0
         // expect(body).toContain("Premium");     // role: 1
         // expect(body).toContain("Admin");       // role: 2
         expect(body).toContain("huh?");        // role: 3
         expect(body).toContain("Snowball Fighting");
         done();
+      });
+    });
+  });
+  */
+  describe("users updgrade and downgrade", () => {
+
+    beforeEach((done) => {
+
+      request.get({ // mock authentication
+        url: "http://localhost:3000/auth/fake",
+        form: {
+          userId: 0 // sign out, "clean the slate"
+        }
+      },
+        (err, res, body) => {
+          done();
+        }
+      );
+    });
+
+    describe("POST /users/:id/upgrade", () => {
+
+      beforeEach((done) => {
+        this.user;
+        this.wiki;
+  
+        User.create({
+          name: "Mister Guy",
+          email: "mrguy@tesla.com",
+          password: "Trekkie4lyfe",
+          passwordConfirmation: "Trekkie4lyfe",
+          role: 0
+          // role: 1
+          // role: 2
+          // role: 3
+        })
+        .then((user) => {
+          this.user = user;
+  
+          Wiki.create({
+            title: "Snowball Fighting",
+            body: "So much snow!",
+            userId: this.user.id
+          })
+          .then((wiki) => {
+            this.wiki = wiki;
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
+  
+          request.get({ // mock authentication
+            url: "http://localhost:3000/auth/fake",
+            form: {
+              userId: user.id, // sign back in
+              role: user.role,
+              email: user.email
+            }
+          },
+            (err, res, body) => {
+              done();
+            }
+          );
+        });
+      });
+      it("should change Standard user to upgraded to Premium", (done) => {
+        User.findOne({where: {id: this.user.id}})
+        .then((user) => {
+          expect(user.role).toBe(0);
+          done();
+        })
+        .catch((err) => {
+          console.log(err);
+          done();
+        });
+        const options = {
+          url: `${base}${this.user.id}/upgrade`
+        };
+        request.post(options, (err, res, body) => {
+          User.findOne({where: {id: this.user.id}})
+          .then((user) => {
+            expect(user.role).toBe(1);
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
+        });
+      });
+    });
+
+    describe("POST /users/:id/downgrade", () => {
+    
+      beforeEach((done) => {
+        this.user;
+        this.wiki;
+
+        User.create({
+          name: "Mister Guy2",
+          email: "mrguy2@tesla.com",
+          password: "Trekkie4lyfe",
+          passwordConfirmation: "Trekkie4lyfe",
+          // role: 0
+          role: 1
+          // role: 2
+          // role: 3
+        })
+        .then((user) => {
+          this.user = user;
+
+          Wiki.create({
+            title: "Snowball Fighting",
+            body: "So much snow!",
+            userId: this.user.id
+          })
+          .then((wiki) => {
+            this.wiki = wiki;
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
+
+          request.get({ // mock authentication
+            url: "http://localhost:3000/auth/fake",
+            form: {
+              userId: user.id, // sign back in
+              role: user.role,
+              email: user.email
+            }
+          },
+            (err, res, body) => {
+              done();
+            }
+          );
+        });
+      });
+
+      it("should change a Premium user to downgraded to Standard", (done) => {
+        User.findOne({where: {id: this.user.id}})
+        .then((user) => {
+          expect(user.role).toBe(1);
+          done();
+        })
+        .catch((err) => {
+          console.log(err);
+          done();
+        });
+        const options = {
+          url: `${base}${this.user.id}/downgrade`
+        };
+        request.post(options, (err, res, body) => {
+          User.findOne({where: {id: this.user.id}})
+          .then((user) => {
+            expect(user.role).toBe(0);
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
+        });
       });
     });
   });

@@ -12,20 +12,38 @@
       <% include ../static/partials/messages.ejs %>
 
       <h1><%= `${user.name}'s profile` %></h1>
-      <h5><%= `Email: ${user.email}` %></h1>
-
+      <h5><%= `Email: ${user.email}` %></h5>
       <h6>User Role: <span><% if(user.role === 0) { %>
-                             <%= "Standard (Free)" %>
-                           <% } else if(user.role === 1) { %>
-                             <%= "Premium" %>
-                           <% } else if(user.role === 2) { %>
-                             <%= "Admin" %>
-                           <% } else { %>
-                             <%= "huh?" %>
-                           <% } %>
-                     </span>
-      </h3>
-
+                            <%= "Standard (Free)" %>
+                          <% } else if(user.role === 1) { %>
+                            <%= "Premium" %>
+                          <% } else if(user.role === 2) { %>
+                            <%= "Admin" %>
+                          <% } else { %>
+                            <%= "huh?" %>
+                          <% } %>
+                    </span>
+      </h6>
+      <% if(currentUser && (currentUser.id === user.id)) { %>
+        <% if(user.role === 0) { %>
+          <span>Upgrade to Premium?</span>
+          <form action="/users/<%= user.id %>/upgrade" method="POST">
+            <script
+              src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+              data-key="pk_test_1zQT9SeARTjexYiD1l665bp2"
+              data-amount="1500"
+              data-name="Demo Site"
+              data-description="Example charge"
+              data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+              data-locale="auto">
+            </script>
+          </form>
+        <% } else if(user.role === 1) { %>
+          <form action="/users/<%= user.id %>/downgrade" method="post">
+            <button type="submit" class="btn btn-primary">Downgrade</button><span> to Standard</span>
+          </form>
+        <% } %>
+      <% } %>
       <hr>
 
       <h2>User Wikis</h2>

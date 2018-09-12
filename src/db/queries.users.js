@@ -1,6 +1,6 @@
 const User = require("./models").User;
 const Wiki = require("./models").Wiki;
-const bcrypt = require("bcryptjs"); 
+const bcrypt = require("bcryptjs");
 
 module.exports = {
   createUser(newUser, callback) {
@@ -49,6 +49,66 @@ module.exports = {
     return User.all()
     .then((users) => {
       callback(null, users);
+    })
+    .catch((err) => {
+      callback(err);
+    });
+  },
+  upgradeUser(req, callback) {
+    return User.findById(req.params.id)
+    .then((user) => {
+      if(!user) {
+        return callback(404);
+      }
+      // console.log(req.body);
+      const stripeToken = req.body.stripeToken;
+      const stripeEmail = req.body.stripeEmail;
+      // const authorized = new Authorizer(req.user, user).update();
+      
+      // if(authorized) {
+      var stripe = require("stripe")("sk_test_dXC7bshnFR7vw5BYfJ5DUCOU");
+
+      const charge = stripe.charges.create({
+        amount: 1500,
+        currency: 'usd',
+        source: stripeToken,
+        receipt_email: stripeEmail,
+        description: 'Blocipedia Premium Upgrade'
+      }, function(err, charge) {
+        user.update({
+          role: 1
+        })
+        .then(() => {
+          callback(null, user);
+        })
+        .catch((err) => {
+          callback(err);
+        });
+      });
+    })
+    .catch((err) => {
+      callback(err);
+    });
+  },
+  downgradeUser(req, callback) {
+    return User.findById(req.params.id)
+    .then((user) => {
+      if(!user) {
+        return callback(404);
+      }
+      // const authorized = new Authorizer(req.user, user).update();
+      
+      // if(authorized) {
+
+      user.update({
+        role: 0
+      })
+      .then(() => {
+        callback(null, user);
+      })
+      .catch((err) => {
+        callback(err);
+      });
     })
     .catch((err) => {
       callback(err);
