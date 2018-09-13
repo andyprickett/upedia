@@ -39,8 +39,9 @@
             </script>
           </form>
         <% } else if(user.role === 1) { %>
+          <% include ../static/partials/alertScript.ejs %>
           <form action="/users/<%= user.id %>/downgrade" method="post">
-            <button type="submit" class="btn btn-primary">Downgrade</button><span> to Standard</span>
+            <button type="submit" onclick="clickAlert(event)" class="btn btn-primary">Downgrade</button><span> to Standard</span>
           </form>
         <% } %>
       <% } %>
@@ -48,13 +49,14 @@
 
       <h2>User Wikis</h2>
 
-      <ul class="list-unstyled">
+      <ul class="list-group">
         <% if(wikis) { %>
           <% wikis.forEach((wiki) => { %>
-            <li>
+            <li class="list-group-item">
               <a href="/wikis/<%= wiki.id %>">
                 <%= wiki.title %>
               </a>
+              <span>[<%= wiki.private ? 'private' : 'public' %>]</span>
             </li>
           <% }) %>
         <% } %>

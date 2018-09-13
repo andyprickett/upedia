@@ -103,7 +103,12 @@ module.exports = {
       user.update({
         role: 0
       })
-      .then(() => {
+      .then((user) => {
+        // console.log(user);
+        Wiki.update(
+          { private: false },
+          { where: { userId: user.id}}
+        ); 
         callback(null, user);
       })
       .catch((err) => {
