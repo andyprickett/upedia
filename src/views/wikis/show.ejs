@@ -18,6 +18,18 @@
       </form>
 
       <p><%- wiki.body %></p>
+      <hr>
+
+      <h1>Collaborators</h1>
+
+      <ul class="list-group">
+        <% wiki.collaborators.forEach((collaborator) => { %>
+          <li class="list-group-item">
+            <a href="/users/<%= collaborator.user.id %>"><%= collaborator.user.name %></a>
+          </li>
+        <% }) %>
+      </ul>
+
       
     </main>
 

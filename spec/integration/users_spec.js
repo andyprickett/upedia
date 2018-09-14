@@ -18,7 +18,6 @@ describe("routes : users", () => {
       done();
     });
   });
-  /*
   describe("GET /users/sign_up", () => {
     it("should render a view with a sign up form", (done) => {
       request.get(`${base}sign_up`, (err, res, body) => {
@@ -157,7 +156,6 @@ describe("routes : users", () => {
       });
     });
   });
-  */
   describe("users updgrade and downgrade", () => {
 
     beforeEach((done) => {
