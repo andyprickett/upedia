@@ -36,7 +36,6 @@ module.exports = {
       include: [{ model: Collaborator, as: "collaborators", include: [{ model: User }] }]
     })
     .then((wiki) => {
-      console.log(wiki)
       callback(null, wiki);
     })
     .catch((err) => {

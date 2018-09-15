@@ -11,6 +11,7 @@ describe("routes : collaborators", () => {
   
   beforeEach((done) => {
     this.user;
+    this.user2;
     this.wiki;
 
     sequelize.sync({force: true}).then((res) => {
@@ -30,8 +31,20 @@ describe("routes : collaborators", () => {
         })
         .then((wiki) => {
           this.wiki = wiki;
-          // this.post = this.wiki.posts[0];
-          done();
+
+          User.create({
+            name: "Mister Guy",
+            email: "mrguy@tesla.com",
+            password: "Trekkie4lyfe",
+          })
+          .then((user) => {
+            this.user2 = user;
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -86,8 +99,8 @@ describe("routes : collaborators", () => {
     });
   });
   */
-  // signed in user contex
-  describe("premium user creating a collaborator", () => {
+  // premium user contex
+  describe("singed in user added as a collaborator", () => {
 
     beforeEach((done) => {
       request.get({
@@ -103,22 +116,43 @@ describe("routes : collaborators", () => {
       );
     });
 
-    describe("POST /topics/:topicId/posts/:postId/favorites/create", () => {
-      it("should create a favorite", (done) => {
+    describe("POST /wikis/:wikiId/collaborators/create", () => {
+      // beforeEach((done) => {
+  
+      //   User.create({
+      //     name: "Mister Guy",
+      //     email: "mrguy@tesla.com",
+      //     password: "Trekkie4lyfe",
+      //   })
+      //   .then((user) => {
+      //     this.user2 = user;
+      //     done();
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //     done();
+      //   });
+      // });
+
+      it("should create a collaborator with other user object", (done) => {
         const options = {
-          url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`
+          url: `${base}${this.wiki.id}/collaborators/create`,
+          form: {
+            userId: this.user2.id
+          }
         };
         request.post(options, (err, res, body) => {
-          Favorite.findOne({
+          Collaborator.findOne({
             where: {
-              userId: this.user.id,
-              postId: this.post.id
+              // userId: this.user.id,
+              wikiId: this.wiki.id
             }
           })
-          .then((favorite) => {
-            expect(favorite).not.toBeNull();
-            expect(favorite.userId).toBe(this.user.id);
-            expect(favorite.postId).toBe(this.post.id);
+          .then((collaborator) => {
+            // console.log(collaborator)
+            expect(collaborator).not.toBeNull();
+            expect(collaborator.userId).toBe(this.user2.id);
+            expect(collaborator.wikiId).toBe(this.wiki.id);
             done();
           })
           .catch((err) => {
@@ -128,25 +162,33 @@ describe("routes : collaborators", () => {
         });
       });
     });
-    describe("POST /topics/:topicId/posts/:postId/favorites/:id/destroy", () => {
-      it("should destroy a favorite", (done) => {
-        let options1 = {
-          url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`
+    describe("POST /wikis/:wikiId/collaborators/:id/destroy", () => {
+      it("should destroy a collaborator object", (done) => {
+        const options1 = {
+          url: `${base}${this.wiki.id}/collaborators/create`,
+          form: {
+            userId: this.user2.id
+          }
         };
-        let favCountBeforeDelete;
-        request.post(options1, (err, res, body) => {
-          this.post.getFavorites()
-          .then((beforeFavorites) => {
-            favCountBeforeDelete = beforeFavorites.length;
-            const favorite = beforeFavorites[0];
+        let collabCountBeforeDelete;
 
-            let options2 = {
-              url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/${favorite.id}/destroy`
+        request.post(options1, (err, res, body) => {
+          this.wiki.getCollaborators()
+          .then((beforeCollaborators) => {
+            collabCountBeforeDelete = beforeCollaborators.length;
+            const collaborator = beforeCollaborators[0];
+
+            const options2 = {
+              url: `${base}${this.wiki.id}/collaborators/${collaborator.id}/destroy`
             };
             request.post(options2, (err, res, body) => {
-              this.post.getFavorites()
-              .then((afterFavorites) => {
-                expect(afterFavorites.length).toBe(favCountBeforeDelete - 1);
+              this.wiki.getCollaborators()
+              .then((afterCollaborators) => {
+                expect(afterCollaborators.length).toBe(collabCountBeforeDelete - 1);
+                done();
+              })
+              .catch((err) => {
+                console.log(err);
                 done();
               });
             });

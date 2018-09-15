@@ -24,24 +24,37 @@ module.exports = {
       callback(errorReformatted);
     });
   },
-  getUser(id, callback) {
+  getUser(req, callback) {
     let result = {};
-    User.findById(id)
+    User.findById(req.params.id)
     .then((user) => {
       if(!user) {
         callback(404);
       } else {
         result["user"] = user;
+        if(req.user && (req.user.id === user.id)) {
+          Wiki.scope({ method: ["userWikis", user.id]}).all()
+          .then((wikis) => {
+            result["wikis"] = wikis;
 
-        Wiki.scope({ method: ["userWikis", id]}).all()
-        .then((wikis) => {
-          result["wikis"] = wikis;
+            callback(null, result);
+          })
+          .catch((err) => {
+            console.log(err);
+            callback(err);
+          }); 
+        } else {
+          Wiki.scope({ method: ["userWikisPublic", user.id]}).all()
+          .then((wikis) => {
+            result["wikis"] = wikis;
 
-          callback(null, result);
-        })
-        .catch((err) => {
-          callback(err);
-        });
+            callback(null, result);
+          })
+          .catch((err) => {
+            console.log(err);
+            callback(err);
+          }); 
+        }
       }
     });
   },

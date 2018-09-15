@@ -25,7 +25,7 @@
       <ul class="list-group">
         <% wiki.collaborators.forEach((collaborator) => { %>
           <li class="list-group-item">
-            <a href="/users/<%= collaborator.user.id %>"><%= collaborator.user.name %></a>
+            <a href="/users/<%= collaborator.User.id %>"><%= collaborator.User.name %></a>
           </li>
         <% }) %>
       </ul>

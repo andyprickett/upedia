@@ -53,7 +53,7 @@ describe("routes : users", () => {
         });
       });
     });
-    it("should not create a new user with invalid attributes and redirect", (done) => {
+    it("should NOT create a new user with invalid attributes and redirect", (done) => {
       const options = {
         url: `${base}sign_up`,
         form: {
