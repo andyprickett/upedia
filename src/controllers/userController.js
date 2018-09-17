@@ -15,6 +15,7 @@ module.exports = {
 
     userQueries.createUser(newUser, (err, user) => {
       if(err) {
+        console.log(err);
         req.flash("error", err);
         res.redirect("/users/sign_up");
       } else {
@@ -28,10 +29,10 @@ module.exports = {
           text: 'Log in and start collaborating on wikis!',
           html: '<strong>Log in and start collaborating on wikis!</strong>',
         };
-        sgMail.send(msg)
-        .catch((err) => {
-          console.log(err); // weird SendGrid error ("Unauthorized"), nobody has an answer, just need to catch it for now.
-        });
+        sgMail.send(msg);
+        // .catch((err) => {
+        //   console.log(err); // weird SendGrid error ("Unauthorized"), nobody has an answer, just need to catch it for now.
+        // });
         // passport.authenticate("local")(req, res, () => {   // nope, not yet
           // req.flash("notice", "You've successfully signed in!"); // nope
           req.flash("notice", "You've successfully signed up!");
