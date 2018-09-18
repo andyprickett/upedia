@@ -16,12 +16,16 @@ module.exports = {
       callback(null, user);
     })
     .catch((err) => {
-      // console.log(err.errors)
-      errorReformatted = [{  // make this fit our view messaging
-        param: err.errors[0].path,
-        msg: err.errors[0].message
-      }]
-      callback(errorReformatted);
+      if(err.errors[0] === undefined) {
+        console.log(err);
+        callback("Something went wrong!");
+      } else {
+        errorReformatted = [{  // make this fit our view messaging for Validation Errors
+          param: err.errors[0].path,
+          msg: err.errors[0].message
+        }]
+        callback(errorReformatted);
+      }
     });
   },
   getUser(id, callback) {
