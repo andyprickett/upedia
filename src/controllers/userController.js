@@ -18,7 +18,6 @@ module.exports = {
         req.flash("error", err);
         res.redirect("/users/sign_up");
       } else {
-
         const sgMail = require('@sendgrid/mail');
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         const msg = {
@@ -30,7 +29,8 @@ module.exports = {
         };
         sgMail.send(msg)
         .catch((err) => {
-          console.log(err); // weird SendGrid error ("Unauthorized"), nobody has an answer, just need to catch it for now.
+          console.log("SendGrid error, probably API key.")
+          console.log(err); // SendGrid API key error ("Unauthorized") must be caught here!!
         });
         // passport.authenticate("local")(req, res, () => {   // nope, not yet
           // req.flash("notice", "You've successfully signed in!"); // nope
