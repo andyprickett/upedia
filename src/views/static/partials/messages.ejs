@@ -5,12 +5,18 @@
     </button>
 
     <% if(messages.error) { %>
-      Validation errors:
-      <ul>
-        <% messages.error.forEach((err) => { %>
-          <li><%= `Field: ${err.param}, Message: ${err.msg}` %></li>
-        <% }) %>
-      </ul>
+      <% if(messages.error[0].param == undefined) { %>
+        <ul>
+          <li><%= `Error Message: ${messages.error}` %></li>
+        </ul>
+      <% } else { %>
+        Validation errors:
+        <ul>
+          <% messages.error.forEach((err) => { %>
+            <li><%= `Field: ${err.param}, Message: ${err.msg}` %></li>
+          <% }) %>
+        </ul>
+      <% } %>
     <% } else { %>
       <p><%= messages.notice %></p>
     <% } %>
