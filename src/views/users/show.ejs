@@ -39,29 +39,57 @@
             </script>
           </form>
         <% } else if(user.role === 1) { %>
-          <% include ../static/partials/alertScript.ejs %>
+          <% include ../static/partials/downgradeAlertScript.ejs %>
           <form action="/users/<%= user.id %>/downgrade" method="post">
             <button type="submit" onclick="clickAlert(event)" class="btn btn-primary">Downgrade</button><span> to Standard</span>
           </form>
         <% } %>
       <% } %>
+
       <hr>
 
       <h2>User Wikis</h2>
 
-      <ul class="list-group">
-        <% if(wikis) { %>
-          <% wikis.forEach((wiki) => { %>
-            <li class="list-group-item">
-              <a href="/wikis/<%= wiki.id %>">
-                <%= wiki.title %>
-              </a>
-              <span>[<%= wiki.private ? 'private' : 'public' %>]</span>
-            </li>
-          <% }) %>
-        <% } %>
-      </ul>
+      <% if(wikis[0] === undefined) { %>
+        <p>None yet!</p>
+      <% } else { %>
+        <ul class="list-group">
+          <% if(wikis) { %>
+            <% wikis.forEach((wiki) => { %>
+              <li class="list-group-item">
+                <a href="/wikis/<%= wiki.id %>">
+                  <%= wiki.title %>
+                </a>
+                <span>[<%= wiki.private ? 'private' : 'public' %>]</span>
+              </li>
+            <% }) %>
+          <% } %>
+        </ul>
+      <% } %>
 
+      <% if(currentUser) { %>
+
+          <% if(collaborators[0]) { %>
+
+            <hr>
+
+            <h2>Wikis Collaboratorating On:</h2>
+
+            <ul class="list-unstyled">
+              <% collaborators.forEach((collaborator) => { %>
+                <li class="list-group-item">
+                  <a href="/wikis/<%= collaborator.Wiki.id %>">
+                    <%= collaborator.Wiki.title %>
+                  </a>
+                  <span>[<%= collaborator.Wiki.private ? 'private' : 'public' %>]</span>
+                </li>
+              <% }) %>
+            </ul>
+
+          <% } %>
+
+      <% } %> 
+           
     </main>
 
     <% include ../static/partials/baseScripts.ejs %>

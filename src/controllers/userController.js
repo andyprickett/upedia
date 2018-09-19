@@ -29,7 +29,7 @@ module.exports = {
         };
         sgMail.send(msg)
         .catch((err) => {
-          console.log("SendGrid error, probably API key.")
+          console.log("SendGrid error, probably API key.");
           console.log(err); // SendGrid API key error ("Unauthorized") must be caught here!!
         });
         // passport.authenticate("local")(req, res, () => {   // nope, not yet
@@ -90,6 +90,18 @@ module.exports = {
       }
     });
   },
+  /*
+  destroy(req, res, next) {
+    userQueries.deleteUser(req, (err, deletedRecordsCount) => {
+      if(err) {
+        res.redirect(err, `/users/${req.params.id}`);
+      } else {
+        req.flash("notice", "User has been deleted.");
+        res.redirect(303, "/users");
+      }
+    });
+  },
+  */
   upgrade(req, res, next) {
     userQueries.upgradeUser(req, (err, user) => {
       if(err || user == null) {

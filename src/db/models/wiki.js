@@ -28,18 +28,12 @@ module.exports = (sequelize, DataTypes) => {
     Wiki.hasMany(models.Collaborator, {
       foreignKey: "wikiId",
       as: "collaborators"
-    })
+    });
   };
   Wiki.addScope("userWikisPublic", (userId) => {
     return {
       where: { userId: userId,
                private: false },
-      order: [["createdAt", "DESC"]]
-    }
-  });
-  Wiki.addScope("userWikis", (userId) => {
-    return {
-      where: { userId: userId },
       order: [["createdAt", "DESC"]]
     }
   });

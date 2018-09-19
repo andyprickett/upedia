@@ -1,6 +1,8 @@
 const User = require("./models").User;
 const Wiki = require("./models").Wiki;
+const Collaborator = require("./models").Collaborator;
 const bcrypt = require("bcryptjs");
+const Authorizer = require("../policies/application");
 
 module.exports = {
   createUser(newUser, callback) {
@@ -36,22 +38,40 @@ module.exports = {
         callback(404);
       } else {
         result["user"] = user;
-        if(req.user && (req.user.id === user.id)) {
-          Wiki.scope({ method: ["userWikis", user.id]}).all()
+
+        if(req.user && ((req.user.role === 2) || (req.user.id === user.id))) { 
+          // signed in, and either an admin or my own profile
+          Wiki.findAll({ 
+            where: {
+              userId: user.id
+            }
+          })
           .then((wikis) => {
             result["wikis"] = wikis;
 
-            callback(null, result);
+            Collaborator.scope({ // collaborator objects, scope includes Wiki
+              method: ["collaboratorOn", user.id]
+            }).all()
+            .then((collaborators) => {
+              result["collaborators"] = collaborators;
+
+              // console.log(result.collaborators[0].Wiki);
+              callback(null, result);
+            })
+            .catch((err) => {
+              console.log(err);
+              callback(err);
+            }); 
           })
           .catch((err) => {
             console.log(err);
             callback(err);
-          }); 
-        } else {
+          });             
+        } else { // not signed in, or someone else's public stuff only
           Wiki.scope({ method: ["userWikisPublic", user.id]}).all()
           .then((wikis) => {
             result["wikis"] = wikis;
-
+            result["collaborators"] = []; // either do this here or put the logic in the view
             callback(null, result);
           })
           .catch((err) => {
@@ -71,6 +91,28 @@ module.exports = {
       callback(err);
     });
   },
+  /*
+  deleteUser(req, callback) {
+    return User.findById(req.params.id)
+
+    .then((user) => {
+      const authorized = new Authorizer(req.user, user).destroy();
+      
+      if(authorized) {
+        user.destroy()
+        .then((deletedRecordsCount) => {
+          callback(null, deletedRecordsCount);
+        });
+      } else {
+        req.flash("notice", "You are not authorized to do that.");
+        callback(401, null);
+      }
+    })
+    .catch((err) => {
+      callback(err);
+    });
+  },
+  */
   upgradeUser(req, callback) {
     return User.findById(req.params.id)
     .then((user) => {
