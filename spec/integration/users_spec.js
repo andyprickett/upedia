@@ -18,7 +18,6 @@ describe("routes : users", () => {
       done();
     });
   });
-  /*
   describe("GET /users/sign_up", () => {
     it("should render a view with a sign up form", (done) => {
       request.get(`${base}sign_up`, (err, res, body) => {
@@ -54,7 +53,7 @@ describe("routes : users", () => {
         });
       });
     });
-    it("should not create a new user with invalid attributes and redirect", (done) => {
+    it("should NOT create a new user with invalid attributes and redirect", (done) => {
       const options = {
         url: `${base}sign_up`,
         form: {
@@ -154,6 +153,77 @@ describe("routes : users", () => {
         expect(body).toContain("huh?");        // role: 3
         expect(body).toContain("Snowball Fighting");
         done();
+      });
+    });
+  });
+  /*
+  describe("POST /users/:id/destroy", () => {
+    beforeEach((done) => {
+
+      request.get({ // mock authentication
+        url: "http://localhost:3000/auth/fake",
+        form: {
+          userId: 0 // sign out, "clean the slate"
+        }
+      },
+        (err, res, body) => {
+          done();
+        }
+      );
+
+      this.user;
+      this.wiki;
+
+      User.create({
+        name: "Mister Guy",
+        email: "mrguy@tesla.com",
+        password: "Trekkie4lyfe",
+        passwordConfirmation: "Trekkie4lyfe",
+        // role: 0
+        role: 1
+        // role: 2
+        // role: 3
+      })
+      .then((user) => {
+        this.user = user;
+
+        Wiki.create({
+          title: "Snowball Fighting",
+          body: "So much snow!",
+          userId: this.user.id
+        })
+        .then((wiki) => {
+          this.wiki = wiki;
+          done();
+        })
+        .catch((err) => {
+          console.log(err);
+          done();
+        });
+
+        request.get({ // mock authentication
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            userId: user.id, // sign back in
+            role: user.role,
+            email: user.email
+          }
+        },
+          (err, res, body) => {
+            done();
+          }
+        );
+      });
+    });
+    it("should delete the user with the associated ID", (done) => {
+      expect(this.user.id).toBe(1);
+      request.post(`${base}${this.user.id}/destroy`, (err, res, body) => {
+        User.findById(1)
+        .then((user) => {
+          expect(err).toBeNull();
+          expect(user).toBeNull();
+          done();
+        });
       });
     });
   });

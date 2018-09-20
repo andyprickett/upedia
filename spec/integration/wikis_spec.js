@@ -104,8 +104,7 @@ describe("routes : wikis", () => {
           .then((wiki) => {
             expect(wiki).toBe(null);
             expect(err).toBeNull();
-            console.log(body)
-             done();
+            done();
           })
           .catch((err) => {
             console.log(err);

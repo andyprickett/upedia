@@ -72,7 +72,7 @@ module.exports = {
     res.redirect("/");
   },
   show(req, res, next) {
-    userQueries.getUser(req.params.id, (err, result) => {
+    userQueries.getUser(req, (err, result) => {
       if(err || result.user === undefined) {
         req.flash("notice", "No user found with that ID.");
         res.redirect("/");
@@ -90,6 +90,18 @@ module.exports = {
       }
     });
   },
+  /*
+  destroy(req, res, next) {
+    userQueries.deleteUser(req, (err, deletedRecordsCount) => {
+      if(err) {
+        res.redirect(err, `/users/${req.params.id}`);
+      } else {
+        req.flash("notice", "User has been deleted.");
+        res.redirect(303, "/users");
+      }
+    });
+  },
+  */
   upgrade(req, res, next) {
     userQueries.upgradeUser(req, (err, user) => {
       if(err || user == null) {
