@@ -5,15 +5,18 @@ const Authorizer = require("../policies/application");
 
 module.exports = {
   getAllWikis(callback) {
-    return Wiki.all({
-      where: {
-        private: false
-      }
-    })
+    // return Wiki.all({
+    //   where: {
+    //     private: false
+    //   }
+    return Wiki.scope({
+      method: ["wikisPublic"]
+    }).all()
     .then((wikis) => {
       callback(null, wikis);
     })
     .catch((err) => {
+      console.log(err);
       callback(err);
     });
   },
@@ -31,13 +34,22 @@ module.exports = {
       callback(err);
     });
   },
-  getWiki(id, callback) {
-    return Wiki.findById(id, {
+  getWiki(req, callback) {
+    return Wiki.findById(req.params.id, {
       include: [{ model: Collaborator, as: "collaborators", include: [{ model: User }] }]
     })
     .then((wiki) => {
-      console.log(wiki.collaborators)
-      callback(null, wiki);
+      if(!wiki) {
+        callback(404); // Nothing to see here, that wiki doesn't exist. We're done.
+      } else {
+        const authorized = new Authorizer(req.user, wiki).show();
+      
+        if(!authorized) { 
+          callback(403);  // You can't see this private wiki! Get out of here!
+        } else {
+          callback(null, wiki); // Ok, you can see it.
+        }
+      }
     })
     .catch((err) => {
       callback(err);

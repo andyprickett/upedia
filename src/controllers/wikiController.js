@@ -44,9 +44,19 @@ module.exports = {
     }
   },
   show(req, res, next) {
-    wikiQueries.getWiki(req.params.id, (err, wiki) => {
+    wikiQueries.getWiki(req, (err, wiki) => {
       if(err || wiki == null) {
-        res.redirect(404, "/wikis");
+        // console.log(err)
+        if(err == 403) { // You may know the :id of this wiki, but you can't see it!
+          req.flash("notice", "You are not authorized to do that.");
+          res.redirect("/wikis");
+        } else if(wiki == null) { // No wiki, bruh.
+          res.redirect(404, "/wikis");
+        } else {
+          console.log(err);
+          req.flash("error", "Something went wrong."); // Just in case.
+          res.redirect("/wikis");
+        }
       } else {
         wiki.body = markdown.toHTML(wiki.body); // the magic!
         res.render("wikis/show", { wiki });
@@ -66,7 +76,7 @@ module.exports = {
     });
   },
   edit(req, res, next) {
-    wikiQueries.getWiki(req.params.id, (err, wiki) => {
+    wikiQueries.getWiki(req, (err, wiki) => {
       if(err || wiki == null) {
         res.redirect(404, "/wikis");
       } else {

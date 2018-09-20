@@ -18,33 +18,45 @@
       </form>
 
       <p><%- wiki.body %></p>
-
-      <hr>
-     
-      <h1>Add Collaborator:</h1>
-
-      <form action="/wikis/<%= wiki.id %>/collaborators/create" method="post">
-        <div class="form-group">
-          <label for="newCollaborator">Add Collaborator</label>
-          <input type="text" class="form-control" name="newCollaborator" aria-describedby="newCollaboratorHelp" placeholder="Enter User's email address">
-        </div>
-        <button type="submit" class="btn btn-primary">Add Collaborator</button>
-      </form>
       
-      <hr>
+      <% if(currentUser) { %>
+      
+        <% if(currentUser.role == 2 || (currentUser.role == 1 && currentUser.id == wiki.userId && wiki.private)) { %>
 
-      <h1>Collaborators</h1>
+          <hr>
+        
+          <h1>Add Collaborator:</h1>
 
-      <ul class="list-group">
-        <% wiki.collaborators.forEach((collaborator) => { %>
-          <li class="list-group-item">
-            <a href="/users/<%= collaborator.User.id %>"><%= collaborator.User.name %></a>
-            <form style="display:initial" action="/wikis/<%= wiki.id %>/collaborators/<%= collaborator.id %>/destroy" method="post">
-              <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-          </li>
-        <% }) %>
-      </ul>
+          <form action="/wikis/<%= wiki.id %>/collaborators/create" method="post">
+            <div class="form-group">
+              <label for="newCollaborator">Add Collaborator</label>
+              <input type="text" class="form-control" name="newCollaborator" aria-describedby="newCollaboratorHelp" placeholder="Enter User's email address">
+            </div>
+            <button type="submit" class="btn btn-primary">Add Collaborator</button>
+          </form>
+          
+          <% if(wiki.collaborators[0]) { %>
+
+            <hr>
+
+            <h1>Collaborators</h1>
+
+            <ul class="list-group">
+              <% wiki.collaborators.forEach((collaborator) => { %>
+                <li class="list-group-item">
+                  <a href="/users/<%= collaborator.User.id %>"><%= collaborator.User.name %></a>
+                  <form style="display:initial" action="/wikis/<%= wiki.id %>/collaborators/<%= collaborator.id %>/destroy" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </li>
+              <% }) %>
+            </ul>
+
+          <% } %>
+
+        <% } %>
+        
+      <% } %>
 
     </main>
 

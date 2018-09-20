@@ -3,6 +3,8 @@ const Wiki = require("./models").Wiki;
 const Collaborator = require("./models").Collaborator;
 const bcrypt = require("bcryptjs");
 const Authorizer = require("../policies/application");
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 
 module.exports = {
   createUser(newUser, callback) {
@@ -83,11 +85,12 @@ module.exports = {
     });
   },
   getAllUsers(callback) {
-    return User.all()
+    return User.findAll({order: [Sequelize.literal('id ASC')]})
     .then((users) => {
       callback(null, users);
     })
     .catch((err) => {
+      console.log(err)
       callback(err);
     });
   },
@@ -167,14 +170,67 @@ module.exports = {
         Wiki.update(
           { private: false },
           { where: { userId: user.id}}
-        ); 
-        callback(null, user);
+        )
+        .then(() => {
+          // Let's collect all Collaborator objects where the associated
+          // Wiki is owned by this here user that just downgraded
+          Collaborator.findAll({
+            where: {
+              '$Wiki.userId$': user.id
+            },
+            include: [{
+              model: Wiki
+            }]
+          })
+          .then((collaborators) => {
+            // Let's build our destroy function that returns a promise
+            const destroyCollaborators = (collaborator) => {
+              Collaborator.destroy({
+                where: {
+                  wikiId: collaborator.wikiId
+                }
+              })
+            }
+            // Let's build the async forEach function
+            async function asyncForEach(array, callback) {
+              for (let index = 0; index < array.length; index++) {
+                await callback(array[index], index, array)
+              }
+            }
+            // Let's do this.
+            const start = async () => {
+              await asyncForEach(collaborators, async (collaborator) => {
+                await destroyCollaborators(collaborator)
+              })
+              console.log('Done')
+            }
+            start();
+            // https://codeburst.io/javascript-async-await-with-foreach-b6ba62bbf404
+
+            // We have now deleted all Collaborator objects associated with this user's
+            // now downgraded-to-public Wikis.
+            callback(null, user);
+          })
+          .catch((err) => {
+            console.log(err);
+            callback(err);
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+
+          callback(err);
+        });
       })
       .catch((err) => {
+        console.log(err);
+
         callback(err);
       });
     })
     .catch((err) => {
+      console.log(err);
+
       callback(err);
     });
   }

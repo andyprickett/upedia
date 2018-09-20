@@ -37,5 +37,11 @@ module.exports = (sequelize, DataTypes) => {
       order: [["createdAt", "DESC"]]
     }
   });
+  Wiki.addScope("wikisPublic", () => {
+    return {
+      where: { private: false },
+      order: [["updatedAt", "DESC"]]
+    }
+  });
   return Wiki;
 };
