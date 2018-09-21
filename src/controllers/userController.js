@@ -40,11 +40,21 @@ module.exports = {
     res.render("users/sign_in");
   },
   signIn(req, res, next) {
-    passport.authenticate("local", {failureRedirect: "/users/sign_in_failed"})(req, res, () => {
+    passport.authenticate("local", {failureRedirect: "/users/sign_in", failureFlash: true})(req, res, () => {
       if(!req.user) {
         /* Never gets here because of "failureRedirect" above, which is a substitute
-           for the default Passport 401 error page. This stuff didn't work anyways!!
-           Frustrating!!!! Had to come up with something else.
+           for the default Passport 401 error page. This stuff didn't work anyways!! 
+           From the docs:
+
+           "If this function gets called, authentication was successful. `req.user` contains 
+           the authenticated user. 
+           
+           By default, if authentication fails, Passport will respond with a 401 Unauthorized 
+           status, and any additional route handlers will not be invoked. If authentication 
+           succeeds, the next handler will be invoked and the req.user property will be set 
+           to the authenticated user."
+
+           These two lines below will only work if you use a Custom Callback, which we're not.
         */
         req.flash("notice", "Sign in failed. Please try again.");
         res.redirect("/users/sign_in");
@@ -55,11 +65,11 @@ module.exports = {
       }
     });
   },
-  signInFailed(req, res, next) {
-    // Substitute for Passport error handling, which I couldn't get to work :(
-    req.flash("notice", "Signin credentials didn't work. Please try again.");
-    res.redirect("/users/sign_in");
-  },
+  // signInFailed(req, res, next) {
+  //   // Substitute for Passport error handling, which I couldn't get to work :(
+  //   req.flash("notice", "Signin credentials didn't work. Please try again.");
+  //   res.redirect("/users/sign_in");
+  // },
   signOut(req, res, next) {
     req.logout();
     req.flash("notice", "You've successfully signed out!");
