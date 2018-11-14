@@ -12,41 +12,35 @@ describe("routes : wikis", () => {
     this.user;
     this.wiki;
 
-    sequelize.sync({force: true}).then((res) => {
+    sequelize.sync({ force: true }).then((res) => {
 
       User.create({
         name: "Star Man",
         email: "starman@tesla.com",
-        password: "Trekkie4lyfe",
-        // passwordConfirmation: "Trekkie4lyfe"
+        password: "Trekkie4lyfe"
       })
-      .then((user) => {
-        this.user = user;
+        .then((user) => {
+          this.user = user;
 
-        Wiki.create({
-          title: "JS Frameworks",
-          body: "There is a lot of them.",
-          // private: false,
-          userId: user.id
-        })
-        .then((wiki) => {
+          Wiki.create({
+            title: "JS Frameworks",
+            body: "There is a lot of them.",
+            userId: user.id
+          })
+            .then((wiki) => {
 
-          this.wiki = wiki;
-          done();
+              this.wiki = wiki;
+              done();
+            });
         })
         .catch((err) => {
           console.log(err);
           done();
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        done();
-      });
     });
   });
   // define the guest user context
-  describe("guest user performing CRUD actions for Wiki", () => {  
+  describe("guest user performing CRUD actions for Wiki", () => {
 
     beforeEach((done) => {
       request.get({ // mock authentication
@@ -90,51 +84,49 @@ describe("routes : wikis", () => {
         });
       });
     });
-    describe("POST /wikis/create", () => {
-      const options = {
-        url: `${base}create`,
-        form: {
-          title: "blink-182 songs",
-          body: "What's your favorite blink-182 song?"
-        }
-      };
-      it("should NOT create a new wiki", (done) => {
-        request.post(options, (err, res, body) => {
-          Wiki.findOne({where: {title: "blink-182 songs"}})
-          .then((wiki) => {
-            expect(wiki).toBe(null);
-            expect(err).toBeNull();
-            done();
-          })
-          .catch((err) => {
-            console.log(err);
-            done();
-          });
-        });
-      });
-      /*
-      it("should not create a new wiki that fails validations", (done) => {
-        const options = {
-          url: `${base}create`,
-          form: {
-            title: "a",
-            body: "b"
-          }
-        };
-        request.post(options, (err, res, body) => {
-          Wiki.findOne({where: {title: "a"}})
-          .then((wiki) => {
-            expect(wiki).toBeNull();
-            done();
-          })
-          .catch((err) => {
-            console.log(err);
-            done();
-          });
-        });
-      });
-      */
-    });
+    // describe("POST /wikis/create", () => {
+    //   const options = {
+    //     url: `${base}create`,
+    //     form: {
+    //       title: "blink-182 songs",
+    //       body: "What's your favorite blink-182 song?"
+    //     }
+    //   };
+    //   it("should NOT create a new wiki", (done) => {
+    //     request.post(options, (err, res, body) => {
+    //       Wiki.findOne({ where: { title: "blink-182 songs" } })
+    //         .then((wiki) => {
+    //           expect(wiki).toBe(null);
+    //           expect(err).toBeNull();
+    //           done();
+    //         })
+    //         .catch((err) => {
+    //           console.log(err);
+    //           done();
+    //         });
+    //     });
+    //   });
+    //   it("should not create a new wiki that fails validations", (done) => {
+    //     const options = {
+    //       url: `${base}create`,
+    //       form: {
+    //         title: "a",
+    //         body: "b"
+    //       }
+    //     };
+    //     request.post(options, (err, res, body) => {
+    //       Wiki.findOne({ where: { title: "a" } })
+    //         .then((wiki) => {
+    //           expect(wiki).toBeNull();
+    //           done();
+    //         })
+    //         .catch((err) => {
+    //           console.log(err);
+    //           done();
+    //         });
+    //     });
+    //   });
+    // });
     describe("GET /wikis/:id", () => {
       it("should render a view with the selected wiki", (done) => {
         request.get(`${base}${this.wiki.id}`, (err, res, body) => {
@@ -147,18 +139,18 @@ describe("routes : wikis", () => {
     describe("POST /wikis/:id/destroy", () => {
       it("should NOT delete the wiki with the associated ID", (done) => {
         Wiki.all()
-        .then((wikis) => {
-          const wikiCountBeforeDelete = wikis.length;
-          expect(wikiCountBeforeDelete).toBe(1);
-          request.post(`${base}${this.wiki.id}/destroy`, (err, res, body) => {
-            Wiki.all()
-            .then((wikis) => {
-              expect(err).toBeNull();
-              expect(wikis.length).toBe(wikiCountBeforeDelete);
-              done();
+          .then((wikis) => {
+            const wikiCountBeforeDelete = wikis.length;
+            expect(wikiCountBeforeDelete).toBe(1);
+            request.post(`${base}${this.wiki.id}/destroy`, (err, res, body) => {
+              Wiki.all()
+                .then((wikis) => {
+                  expect(err).toBeNull();
+                  expect(wikis.length).toBe(wikiCountBeforeDelete);
+                  done();
+                });
             });
           });
-        });
       });
     });
     describe("GET /wikis/:id/edit", () => {
@@ -187,22 +179,24 @@ describe("routes : wikis", () => {
             where: { id: this.wiki.id }
             //where: {id:1}
           })
-          .then((wiki) => {
-            expect(wiki.title).toBe("JS Frameworks");
-            done();
-          });
+            .then((wiki) => {
+              expect(wiki.title).toBe("JS Frameworks");
+              done();
+            });
         });
       });
     });
   });
   // define the standard user context
-  describe("standard user performing CRUD actions for Wiki", () => {  
+  describe("standard user performing CRUD actions for Wiki", () => {
 
     beforeEach((done) => {
       request.get({ // mock authentication
         url: "http://localhost:3000/auth/fake",
         form: {
-          userId: this.user.id // signed in
+          userId: this.user.id, // signed in (not 0)
+          email: this.user.email,
+          role: 0 // standard user
         }
       },
         (err, res, body) => {
@@ -210,7 +204,6 @@ describe("routes : wikis", () => {
         }
       );
     });
-
     describe("GET /wikis", () => {
       it("should return a status code 200 and all wikis", (done) => {
         request.get(base, (err, res, body) => {
@@ -241,17 +234,17 @@ describe("routes : wikis", () => {
       };
       it("should create a new wiki and redirect", (done) => {
         request.post(options, (err, res, body) => {
-          Wiki.findOne({where: {title: "blink-182 songs"}})
-          .then((wiki) => {
-            expect(res.statusCode).toBe(303);
-            expect(wiki.title).toBe("blink-182 songs");
-            expect(wiki.body).toBe("What's your favorite blink-182 song?");
-            done();
-          })
-          .catch((err) => {
-            console.log(err);
-            done();
-          });
+          Wiki.findOne({ where: { title: "blink-182 songs" } })
+            .then((wiki) => {
+              expect(res.statusCode).toBe(303);
+              expect(wiki.title).toBe("blink-182 songs");
+              expect(wiki.body).toBe("What's your favorite blink-182 song?");
+              done();
+            })
+            .catch((err) => {
+              console.log(err);
+              done();
+            });
         });
       });
       it("should not create a new wiki that fails validations", (done) => {
@@ -263,15 +256,15 @@ describe("routes : wikis", () => {
           }
         };
         request.post(options, (err, res, body) => {
-          Wiki.findOne({where: {title: "a"}})
-          .then((wiki) => {
-            expect(wiki).toBeNull();
-            done();
-          })
-          .catch((err) => {
-            console.log(err);
-            done();
-          });
+          Wiki.findOne({ where: { title: "a" } })
+            .then((wiki) => {
+              expect(wiki).toBeNull();
+              done();
+            })
+            .catch((err) => {
+              console.log(err);
+              done();
+            });
         });
       });
     });
@@ -287,18 +280,18 @@ describe("routes : wikis", () => {
     describe("POST /wikis/:id/destroy", () => {
       it("should delete the wiki with the associated ID", (done) => {
         Wiki.all()
-        .then((wikis) => {
-          const wikiCountBeforeDelete = wikis.length;
-          expect(wikiCountBeforeDelete).toBe(1);
-          request.post(`${base}${this.wiki.id}/destroy`, (err, res, body) => {
-            Wiki.all()
-            .then((wikis) => {
-              expect(err).toBeNull();
-              expect(wikis.length).toBe(wikiCountBeforeDelete - 1);
-              done();
+          .then((wikis) => {
+            const wikiCountBeforeDelete = wikis.length;
+            expect(wikiCountBeforeDelete).toBe(1);
+            request.post(`${base}${this.wiki.id}/destroy`, (err, res, body) => {
+              Wiki.all()
+                .then((wikis) => {
+                  expect(err).toBeNull();
+                  expect(wikis.length).toBe(wikiCountBeforeDelete - 1);
+                  done();
+                });
             });
           });
-        });
       });
     });
     describe("GET /wikis/:id/edit", () => {
@@ -326,10 +319,10 @@ describe("routes : wikis", () => {
             where: { id: this.wiki.id }
             //where: {id:1}
           })
-          .then((wiki) => {
-            expect(wiki.title).toBe("JavaScript Frameworks");
-            done();
-          });
+            .then((wiki) => {
+              expect(wiki.title).toBe("JavaScript Frameworks");
+              done();
+            });
         });
       });
     });

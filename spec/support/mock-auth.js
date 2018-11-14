@@ -8,19 +8,18 @@ module.exports = {
       role = req.body.role || role;
       id = req.body.userId || id;
       email = req.body.email || email;
-      
-      if(id && id != 0) {
+
+      if (id && id != 0) {
         req.user = {
           "id": id,
           "email": email,
           "role": role
         };
-        console.log(role)
-      } else if(id == 0) {
+      } else if (id == 0) {
         delete req.user;
       }
 
-      if( next ){ next() }
+      if (next) { next() }
     }
 
     function route(req, res) {
@@ -29,5 +28,9 @@ module.exports = {
 
     app.use(middleware)
     app.get("/auth/fake", route)
+    app.use((req, res, next) => {
+      res.locals.currentUser = req.user;
+      next();
+    });
   }
 }

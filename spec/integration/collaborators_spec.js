@@ -40,15 +40,15 @@ describe("routes : collaborators", () => {
           .then((user) => {
             this.user2 = user;
             done();
-          })
-          .catch((err) => {
-            console.log(err);
-            done();
+          // })
+          // .catch((err) => {
+          //   console.log(err);
+          //   done();
           });
-        })
-        .catch((err) => {
-          console.log(err);
-          done();
+        // })
+        // .catch((err) => {
+        //   console.log(err);
+        //   done();
         });
       })
       .catch((err) => {
@@ -57,48 +57,6 @@ describe("routes : collaborators", () => {
       });
     });
   });
-/*
-  // guest user context
-  describe("guest attempting to favorite a post", () => {
-
-    beforeEach((done) => {
-      request.get({
-        url: "http://localhost:3000/auth/fake",
-        form: {
-          userId: 0
-        }
-      },
-        (err, res, body) => {
-          done();
-        }
-      );
-    });
-
-    describe("POST /topics/:topicId/posts/:postId/favorites/create", () => {
-      it("should not create a new favorite", (done) => {
-        const options = {
-          url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`
-        };
-        let favCountBeforeCreate;
-        this.post.getFavorites()
-        .then((beforeFavorites) => {
-          favCountBeforeCreate = beforeFavorites.length;
-          request.post(options, (err, res, body) => {
-            Favorite.all()
-            .then((afterFavorites) => {
-              expect(favCountBeforeCreate).toBe(afterFavorites.length);
-              done();
-            })
-            .catch((err) => {
-              console.log(err);
-              done();
-            });
-          });
-        });
-      });
-    });
-  });
-  */
   // premium user contex
   describe("singed in user added as a collaborator", () => {
 
@@ -107,6 +65,7 @@ describe("routes : collaborators", () => {
         url: "http://localhost:3000/auth/fake",
         form: {
           role: 1,
+          email: this.user.email,
           userId: this.user.id
         }
       },
@@ -117,28 +76,13 @@ describe("routes : collaborators", () => {
     });
 
     describe("POST /wikis/:wikiId/collaborators/create", () => {
-      // beforeEach((done) => {
-  
-      //   User.create({
-      //     name: "Mister Guy",
-      //     email: "mrguy@tesla.com",
-      //     password: "Trekkie4lyfe",
-      //   })
-      //   .then((user) => {
-      //     this.user2 = user;
-      //     done();
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     done();
-      //   });
-      // });
 
       it("should create a collaborator with other user object", (done) => {
         const options = {
           url: `${base}${this.wiki.id}/collaborators/create`,
           form: {
-            userId: this.user2.id
+            userId: this.user2.id,
+            newCollaborator: this.user2.email
           }
         };
         request.post(options, (err, res, body) => {
@@ -167,7 +111,8 @@ describe("routes : collaborators", () => {
         const options1 = {
           url: `${base}${this.wiki.id}/collaborators/create`,
           form: {
-            userId: this.user2.id
+            userId: this.user2.id,
+            newCollaborator: this.user2.email
           }
         };
         let collabCountBeforeDelete;
