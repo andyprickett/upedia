@@ -22,8 +22,8 @@ module.exports = {
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         const msg = {
           to: user.email,
-          from: 'signedup@blocipedia.com',
-          subject: "You've Signed Up with Blocipedia!",
+          from: 'signedup@upedia.com',
+          subject: "You've Signed Up with Upedia!",
           text: 'Log in and start collaborating on wikis!',
           html: '<strong>Log in and start collaborating on wikis!</strong>',
         };

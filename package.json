@@ -1,5 +1,5 @@
 {
-  "name": "blocipedia-node",
+  "name": "Upedia",
   "version": "1.0.0",
   "description": "An application that allows users to create, collaborate on, and share wikis.",
   "main": "src/server.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/andyprickett/blocipedia-node.git"
+    "url": "https://github.com/andyprickett/upedia.git"
   },
   "author": "Andy Prickett",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/andyprickett/blocipedia-node/issues"
+    "url": "https://github.com/andyprickett/upedia/issues"
   },
-  "homepage": "https://github.com/andyprickett/blocipedia-node#readme",
+  "homepage": "https://github.com/andyprickett/upedia#readme",
   "dependencies": {
     "@sendgrid/mail": "~6.3.1",
     "bcryptjs": "~2.4.3",

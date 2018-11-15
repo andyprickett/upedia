@@ -135,7 +135,7 @@ module.exports = {
         currency: 'usd',
         source: stripeToken,
         receipt_email: stripeEmail,
-        description: 'Blocipedia Premium Upgrade'
+        description: 'Upedia Premium Upgrade'
       }, function(err, charge) {
         user.update({
           role: 1
