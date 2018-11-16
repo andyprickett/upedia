@@ -25,7 +25,7 @@
 * Styling (or lack therof) with Bootstrap. Just enough to get things up and running, as the name indicates.
 
 ## Comments and Complications
-This application is based on a project completed for the Bloc Web Developer Track program. It is operational on my local machine, and in a live deployment on Heroku. There are some problems, however, and some improvements to be made:
+This application is based on a project completed for the Bloc Web Developer Track program. It is operational on my local machine, and in a [live deployment on Heroku](https://upedia.herokuapp.com/). There are some problems, however, and some improvements to be made:
 
 * The tests do not pass when they are all run at once. Something is amiss in the order of events, and I've yet to track it down.
 * The landing page has "Free Plan" and "Premium Plan" buttons that are intended to go somewhere useful eventually, but currently go nowhere.
