@@ -16,14 +16,14 @@ module.exports = {
         where: { email }
       })
       .then((user) => {
-        /* This all differs slightly from current Passport docs, and other
-           stuff people have figured out. It doesn't work as expected as is.
-           However, udating it to the other ways didn't either :(
-        */
         if(!user || !authHelper.comparePass(password, user.password)) {
-          return done(null, false, { message: "Invalid email or password." }); // We never see this message :(
+          return done(null, false, { message: "Invalid email or password." });
         }
         return done(null, user);
+      })
+      .catch((err) => {
+        console.log(err);
+        return done(err);
       })
     }));
 
